@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Propose</title>
+    <!-- Bootstrap CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+   
+    <!-- Custom CSS-->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter&family=Itim&display=swap');
+
+  
+  .coffee-btn {
+    position: fixed;
+    bottom: -60px;
+    right: 20px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5%;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0px 0px 17px 7px #bd5fff99;
+    z-index: 999;
+    opacity: 0;
+    animation: fall-in-out 6s ease-in-out infinite;
+    transform: rotate(-30deg);
+  }
+
+  @keyframes fall-in-out {
+    0% {
+      bottom: -60px;
+      transform: rotate(-30deg) scale(0.5);
+      opacity: 0;
+    }
+    20% {
+      bottom: 40px;
+      transform: rotate(15deg) scale(1.1);
+      opacity: 1;
+    }
+    30% {
+      transform: rotate(-10deg);
+    }
+    40% {
+      transform: rotate(5deg);
+    }
+    50% {
+      bottom: 20px;
+      transform: rotate(0deg);
+      opacity: 1;
+    }
+    80% {
+      bottom: 20px;
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+    100% {
+      bottom: -60px;
+      opacity: 0;
+      transform: rotate(-30deg) scale(0.5);
+    }
+  }
+
+  .chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-image: url(https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXc0NDMyZmhuNnl0Yjg2a2ltdjBtaTcxaHE4MXJzOTc1MndsdTBrZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/U3qYN8S0j3bpK/giphy.webp);
+    border: 2px solid #ff0000;
+    border-radius: 14px;
+    padding: 16px;
+    width: 340px;
+    max-width: 95%;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 9999;
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 500px) {
+    .chat-popup {
+      left: 10px;
+      right: 10px;
+      width: auto;
+      bottom: 80px;
+      max-height: 80vh;
+    }
+    .rating-box {
+      gap: 10px;
+    }
+    .rating-box label {
+      font-size: 25px;
+    }
+  }
+
+  .chat-popup .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 18px;
+    color: #ccc;
+    cursor: pointer;
+  }
+
+  .chat-popup h2 {
+    text-align: center;
+    color: #001dff;
+    margin-bottom: 12px;
+    font-size: 20px;
+  }
+
+  .chat-popup input[type="text"],
+  .chat-popup textarea {
+    width: 100%;
+    padding: 12px 5px;
+    margin: 6px 0;
+    border: 1px solid #001dff;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 16px;
+    resize: none;
+    font-family: inherit;
+    transition: transform 0.3s ease, color 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .chat-popup input[type="text"]:focus,
+  .chat-popup textarea:focus {
+    transform: translateY(-5px);
+    color: #00ffff;
+    border-color: #00ffff;
+  }
+
+  .chat-popup button {
+    background: #6bfff369;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .chat-popup .status {
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  .chat-log {
+    margin-top: 16px;
+    max-height: 180px;
+    overflow-y: auto;
+    border-top: 1px solid #444;
+    padding-top: 10px;
+  }
+
+  .chat-msg {
+    background-color: #2e2e2e;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #eee;
+  }
+
+  .rating-box {
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+    padding: 10px;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .rating-box label {
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  input:not(:checked)~label {
+    color: #eeeeee3a;
+    transition: .3s;
+  }
+
+  input:checked~label {
+    color: #ffa534;
+    animation: filling-animation .7s forwards;
+    filter: drop-shadow(0px 0px 10px #ffffff3f);
+  }
+
+  @keyframes filling-animation {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(0); }
+    60% { transform: scale(1.2); }
+  }
+</style>
+
+  <body>
+    <div class="container text-center">
+      <marquee behavior="alternate" direction="right"
+        ><h2 class="propose-day">Today is Propose Day 💖</h2>
+      </marquee>
+      <div id="parentElement">
+        <div class="d-flex justify-content-center">
+          <lottie-player
+            src="https://assets10.lottiefiles.com/packages/lf20_8paygygk.json"
+            background="transparent"
+            speed="1"
+            style="width: 300px; height: 300px"
+            loop
+            autoplay
+          ></lottie-player>
+        </div>
+        <h1>Will you be my girlfriend again? ❤️</h1>
+        <div class="d-flex justify-content-center">
+          <button onclick="showShayari()" class="btn btn-primary">
+            Yes, Forever! 💖
+          </button>
+          <button onclick="showLoveMessage()" class="btn btn-primary">
+            Yes | Gift? 🎁
+          </button>
+        </div>
+      </div>
+
+      <!-- Love Message Section -->
+      <div
+        class="position-absolute top-50 start-50 translate-middle"
+        id="showMessage"
+        style="display: none"
+      >
+        <lottie-player
+          src="https://assets1.lottiefiles.com/packages/lf20_utsfwa3k.json"
+          background="transparent"
+          speed="1"
+          style="width: 300px; height: 300px"
+          loop
+          autoplay
+        ></lottie-player>
+        <h1 class="ml6">
+          <span class="text-wrapper"
+            ><span class="letters">I Love You! ❤️</span></span
+          >
+        </h1>
+      </div>
+      <button class="coffee-btn" onclick="openPopup()">
+    <img src="./feedback.png" alt="click" style="width: 45px; height: 45px;">
+  </button>
+
+  <div class="chat-popup" id="chatPopup">
+    <span class="close-btn" onclick="closePopup()">❌</span>
+    <h2>This message will be delivered to the developer and owner of the website</h2>
+    <p style="font-size: 13px; color: #fff; text-align: center; margin-top: -8px; font-family: Quicksand, sans-serif;">
+      Got a doubt, need help with coding, or want a special project made for someone? Just drop your message here!<br>
+      If you have any suggestions, feedback, or cool ideas to improve the site – feel free to share them too!<br>
+      Insta 👉🏻
+      <a href="https://instagram.com/the.chillcoder" target="_blank" style="color: #98ff2d; text-decoration: none;">
+        @the.chillcoder
+      </a><br>
+      Insta 👉🏻
+      <a href="https://instagram.com/jaswant_0707" target="_blank" style="color: #98ff2d; text-decoration: none;">
+        @Jaswant_0707
+      </a>
+    </p>
+
+    <div class="rating-box">
+      <input type="radio" id="rating-5" name="rating" hidden>
+      <label for="rating-5" class="fas fa-star"></label>
+      <input type="radio" id="rating-4" name="rating" hidden>
+      <label for="rating-4" class="fas fa-star"></label>
+      <input type="radio" id="rating-3" name="rating" hidden>
+      <label for="rating-3" class="fas fa-star"></label>
+      <input type="radio" id="rating-2" name="rating" hidden>
+      <label for="rating-2" class="fas fa-star"></label>
+      <input type="radio" id="rating-1" name="rating" hidden>
+      <label for="rating-1" class="fas fa-star"></label>
+    </div>
+
+    <form id="chatForm">
+      <input type="text" name="subject" id="nameField" placeholder="Your Name" required />
+      <input type="text" name="contactEmail" id="contactEmailField" placeholder="Your Email or Contact Number" required />
+      <textarea name="message" id="msgField" placeholder="Write your message..." required></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <div class="status" id="statusMsg"></div>
+    <div class="chat-log" id="chatLog"></div>
+  </div>
+
+    </div>
+    <audio id="bgMusic" loop>
+      <source src="1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+      const audio = document.getElementById('bgMusic');
+      
+      // Load saved time from localStorage
+      const savedTime = localStorage.getItem('bgMusicTime');
+      if (savedTime) {
+        audio.currentTime = parseFloat(savedTime);
+      }
+
+      // Check if music was playing before
+      const isPlaying = localStorage.getItem('bgMusicPlaying') === 'true';
+
+      if (isPlaying) {
+        // Try to autoplay if it was playing before
+        audio.play().catch(() => {
+          // If autoplay fails, wait for click
+          document.addEventListener('click', startMusic, { once: true });
+        });
+      } else {
+        // If it wasn't playing, wait for click
+        document.addEventListener('click', startMusic, { once: true });
+      }
+
+      function startMusic() {
+        if (audio.paused) {
+          audio.play().catch(error => console.log("Playback failed:", error));
+          localStorage.setItem('bgMusicPlaying', 'true');
+        }
+      }
+
+      // Save time periodically
+      audio.addEventListener('timeupdate', () => {
+        localStorage.setItem('bgMusicTime', audio.currentTime);
+      });
+
+      // Save playing state
+      audio.addEventListener('play', () => localStorage.setItem('bgMusicPlaying', 'true'));
+      audio.addEventListener('pause', () => localStorage.setItem('bgMusicPlaying', 'false'));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init("wBFeLQNydZy5800ek");
+
+    let nameLocked = false;
+    let senderName = "";
+    let chatVisible = false;
+    let lastContact = localStorage.getItem("lastContact") || "";
+    let lastEmail = localStorage.getItem("lastEmail") || "";
+
+    const msgField = document.getElementById("msgField");
+    msgField.addEventListener("input", function () {
+      this.style.height = "auto";
+      this.style.height = this.scrollHeight + "px";
+    });
+
+    document.getElementById("chatForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const nameInput = document.getElementById("nameField");
+      const contactEmailInput = document.getElementById("contactEmailField");
+      const messageInput = document.getElementById("msgField");
+      const status = document.getElementById("statusMsg");
+      const chatLog = document.getElementById("chatLog");
+
+      if (!nameLocked) {
+        senderName = nameInput.value;
+        nameInput.disabled = true;
+        nameLocked = true;
+      }
+
+      const userMessage = messageInput.value.trim();
+      const userContactEmail = contactEmailInput.value.trim();
+
+      if (!userMessage) {
+        status.innerText = "Type something 😛";
+        return;
+      }
+
+      const info = "info:Propose-Day";
+      const msg = `msg: ${userMessage}`;
+      const userContact = `user contact: ${userContactEmail}`;
+      const fullMessage = `${info}\n${msg}\n${userContact}`;
+
+      const ratingValue = document.querySelector('input[name="rating"]:checked');
+      const ratingText = ratingValue ? ` Rating: ${ratingValue.id.split('-')[1]}/5` : " Rating: Not given";
+
+      const subjectText = `${senderName}\n${ratingText}`;
+
+      const params = {
+        subject: subjectText,
+        message: fullMessage,
+        email: userContactEmail
+      };
+      status.innerText = "Sending... 💫";
+
+      emailjs.send("service_u2s4jkc", "template_ghitldw", params)
+        .then(function () {
+          status.innerHTML = "Message sent successfully! ✅<br>Thank you For Your Feedback!";
+          const msgDiv = document.createElement("div");
+          msgDiv.classList.add("chat-msg");
+          msgDiv.textContent = `${senderName}: ${userMessage}`;
+          chatLog.appendChild(msgDiv);
+
+          messageInput.value = "";
+          messageInput.style.height = "90px";
+          chatLog.scrollTop = chatLog.scrollHeight;
+        }, function (error) {
+          status.innerText = "Failed to send message! ❌";
+          console.error("EmailJS Error:", error);
+        });
+    });
+
+    function openPopup() {
+      const chatPopup = document.getElementById("chatPopup");
+      const coffeeBtn = document.querySelector(".coffee-btn");
+
+      chatVisible = !chatVisible;
+
+      if (chatVisible) {
+        chatPopup.style.display = "block";
+        coffeeBtn.style.display = "none";
+        document.getElementById("contactEmailField").value = lastContact || lastEmail;
+      } else {
+        chatPopup.style.display = "none";
+        coffeeBtn.style.display = "inline-block";
+      }
+    }
+
+    function closePopup() {
+      document.getElementById("chatPopup").style.display = "none";
+      document.querySelector(".coffee-btn").style.display = "inline-block";
+      chatVisible = false;
+
+      const contactEmailInput = document.getElementById("contactEmailField").value.trim();
+      if (contactEmailInput) {
+        if (isNaN(contactEmailInput)) {
+          localStorage.setItem("lastEmail", contactEmailInput);
+        } else {
+          localStorage.setItem("lastContact", contactEmailInput);
+        }
+      }
+    }
+  </script>
+
+
+    <!-- LottieFiles CDN -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Anim JS CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+  </body>
+</html>
